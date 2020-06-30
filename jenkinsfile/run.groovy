@@ -15,7 +15,7 @@ pipeline {
                             sh "echo '${password}' | sudo -S docker stop spn"
                             sh "echo '${password}' | sudo -S docker container rm spn"
                         } catch (Exception e) {
-                            print 'container not exist, skip clean'
+                            print 'container not exist'
                         }
                     }
                 }
@@ -41,6 +41,7 @@ pipeline {
                     ]) {
 
                         sh "echo '${password}' | sudo -S docker build ${WORKSPACE}/auto -t sergey_prokopyev_nginx"
+                        currentBuild.result = "FAILURE"
                         sh "echo '${password}' | sudo -S docker run -d -p 1111:80 --name spn -v /home/adminci/is_mount_dir:/stat sergey_prokopyev_nginx"
                     }
                 }
@@ -57,6 +58,23 @@ pipeline {
                         
                         sh "echo '${password}' | sudo -S docker exec -t spn bash -c 'df -h > /stat/stats.txt'"
                         sh "echo '${password}' | sudo -S docker exec -t spn bash -c 'top -n 1 -b >> /stat/stats.txt'"
+                    }
+                }
+            }
+        }
+        stage ('stop'){
+            steps{
+                script{
+                     withCredentials([
+                        usernamePassword(credentialsId: 'srv_sudo',
+                        usernameVariable: 'username',
+                        passwordVariable: 'password')
+                    ]) {
+                        try {
+                            sh "echo '${password}' | sudo -S docker stop spn"
+                        } catch (Exception e) {
+                            print 'scip'
+                        }
                     }
                 }
             }
