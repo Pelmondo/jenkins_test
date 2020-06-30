@@ -31,7 +31,7 @@ pipeline {
                 }
             }
         }
-        stage ('Build & run docker page'){
+        stage ('Build & run docker image'){
             steps{
                 script{
                      withCredentials([
