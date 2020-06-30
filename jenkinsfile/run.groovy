@@ -12,8 +12,8 @@ pipeline {
                         passwordVariable: 'password')
                     ]) {
                         try {
-                            sh "echo '${password}' | sudo -S docker stop isng"
-                            sh "echo '${password}' | sudo -S docker container rm isng"
+                            sh "echo '${password}' | sudo -S docker stop spn"
+                            sh "echo '${password}' | sudo -S docker container rm spn"
                         } catch (Exception e) {
                             print 'container not exist, skip clean'
                         }
@@ -31,7 +31,7 @@ pipeline {
                 }
             }
         }
-        stage ('Build & run docker image'){
+        stage ('Build & run docker page'){
             steps{
                 script{
                      withCredentials([
